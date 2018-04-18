@@ -7,8 +7,7 @@ RUN apt-get update && \
     apt-get install -y python-pip && \
     apt-get install -y vim 
 
-RUN pip install flask
-RUN pip install requests
+RUN pip install -f requirements.txt
 
 RUN apt-get clean && \ 
     rm -rf /var/lib/apt/lists/* && \
