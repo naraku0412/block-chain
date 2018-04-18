@@ -2,7 +2,6 @@
 # -*- coding: UTF-8 -*-
 import hashlib
 import json
-from time import time
 from hashlib import sha256
 from time import time
 from uuid import uuid4
