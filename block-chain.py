@@ -12,6 +12,13 @@ from flask import Flask, jsonify, request
 from urllib.parse import urlparse
 import requests
 import pickle
+from optparse import OptionParser
+
+def parse_opts(parser):
+    parser.add_option("-p","--port",action="store",type="int",dest="port",default=5000,help="the working port")
+    (options,args) = parser.parse_args()
+
+    return options
 
 class Blockchain(object):
     def __init__(self):
@@ -145,6 +152,7 @@ class Blockchain(object):
             return True
         return False
 
+options = parse_opts(OptionParser(usage="%prog [options]"))
 # Instantiate our Node
 app = Flask(__name__)
 # Generate a globally unique address for this node
@@ -227,4 +235,4 @@ def consensus():
         }
     return jsonify(response), 200
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=6000)
+    app.run(host='0.0.0.0', port=options.port)
