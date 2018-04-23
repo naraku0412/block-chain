@@ -152,7 +152,7 @@ node_identifier = str(uuid4()).replace('-', '')
 # Instantiate the Blockchain
 fn = os.path.join("/mnt","block-chain.pkl") 
 if os.path.exists(fn):
-    with open(fn,'r') as f:
+    with open(fn,'rb') as f:
         blockchain = pickle.load(f)
 else:
     blockchain = Blockchain()
@@ -178,7 +178,7 @@ def mine():
         'proof': block['proof'],
         'previous_hash': block['previous_hash'],
     }
-    with open(fn,'w') as f:
+    with open(fn,'wb') as f:
         pickle.dump(blockchain,f)
     return jsonify(response), 200
 @app.route('/transactions/new', methods=['POST'])
