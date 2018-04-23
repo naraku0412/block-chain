@@ -1,5 +1,6 @@
 #!/usr/local/bin/python
 # -*- coding: UTF-8 -*-
+import os
 import hashlib
 import json
 from hashlib import sha256
@@ -10,6 +11,7 @@ from uuid import uuid4
 from flask import Flask, jsonify, request
 from urllib.parse import urlparse
 import requests
+import pickle
 
 class Blockchain(object):
     def __init__(self):
@@ -148,7 +150,12 @@ app = Flask(__name__)
 # Generate a globally unique address for this node
 node_identifier = str(uuid4()).replace('-', '')
 # Instantiate the Blockchain
-blockchain = Blockchain()
+fn = os.path.join("/mnt","block-chain.pkl") 
+if os.path.exists(fn):
+    with open(fn,'r') as f:
+        blockchain = pickle.load(f)
+else:
+    blockchain = Blockchain()
 @app.route('/mine', methods=['GET'])
 def mine():
     # We run the proof of work algorithm to get the next proof...
@@ -171,6 +178,8 @@ def mine():
         'proof': block['proof'],
         'previous_hash': block['previous_hash'],
     }
+    with open(fn,'w') as f:
+        pickle.dump(blockchain,f)
     return jsonify(response), 200
 @app.route('/transactions/new', methods=['POST'])
 def new_transaction():
@@ -183,7 +192,6 @@ def new_transaction():
     index = blockchain.new_transaction(values['sender'], values['recipient'], values['amount'])
     response = {'message': f'Transaction will be added to Block {index}'}
     return jsonify(response), 201
-
 @app.route('/chain', methods=['GET'])
 def full_chain():
     response = {
