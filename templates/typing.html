@@ -1,0 +1,82 @@
+{% extends "layout.html" %}
+{% block title %}录入{% endblock %}
+{% block head %}
+  {{ super() }}
+{% endblock %}
+{% block section %}
+    <div id="tab">  
+        <!--选项的头部-->  
+        <div id="tab-header">  
+            <ul>  
+                <li class="selected">交易记录</li>  
+                <li>检测记录</li>  
+                <!--<li>技术</li>-->  
+            </ul>  
+        </div>  
+        <!--主要内容-->  
+        <div id="tab-content">  
+            <div class="dom" style="display: block;">  
+                <form method="POST" action="/transction_type">
+                <table>
+                    <tr>
+                        <td>编号</td>
+                        <td><input type="text" name="id"/></td>
+                    </tr>
+                    <br>
+                    <tr>
+                        <td>源位置</td>
+                        <td><input type="text" name="src"/></td>
+                    </tr>
+                    <br>
+                    <tr>
+                        <td>目的位置</td>
+                        <td><input type="text" name="dst"/></td>
+                    </tr>
+                    <br><br>
+                    <tr>
+                    <td><input type="submit" value="录入"></td>
+                    </tr>
+                </table>
+                </form>
+            </div>  
+            <div class="dom">  
+                <form method="POST" action="/checkpoint_type">
+                <table>
+                    <tr>
+                        <td>日期</td>
+                        <td><input type="text" name="date"/></td>
+                    </tr>
+                    <br>
+                    <tr>
+                        <td>编号</td>
+                        <td><input type="text" name="id"/></td>
+                    </tr>
+                    <br>
+                    <tr>
+                        <td>体温</td>
+                        <td><input type="text" name="temp"/></td>
+                    </tr>
+                    <br>
+                    <tr>
+                        <td>状态</td>
+                        <td><input type="text" name="status"/></td>
+                    </tr>
+                    <br><br>
+                    <tr>
+                    <td><input type="submit" value="录入"></td>
+                    </tr>
+                </table>
+                </form>
+            </div>  
+        </div> 
+    </div> 
+{% endblock %}
+{% block header %}
+  {{ super() }}
+{% endblock %}
+{% block nav %}
+  {{ super() }}
+{% endblock %}
+{% block footer %}
+  {{ super() }}
+{% endblock %}

@@ -1,0 +1,44 @@
+{% extends "layout.html" %}
+{% block title %}结果{% endblock %}
+{% block head %}
+  {{ super() }}
+{% endblock %}
+{% block section %}
+  {% if msgs %}
+    <table>
+    <tr>
+      <td>编号</td>
+      <td>{{ id }}</td>
+    </tr>
+    {% for msg in msgs %}
+      <tr>
+        <td>----------</td>
+      </tr>
+      <tr>
+        <td>日期</td>
+        <td>{{ msg.date|e }}</td>
+      </tr>
+      <tr>
+        <td>体温</td>
+        <td>{{ msg.temp|e }}</td>
+      </tr>
+      <tr>
+        <td>状态</td>
+        <td>{{ msg.status|e }}</td>
+      </tr>
+    {% endfor %}
+    </ul>
+    </table>
+  {% else %}
+    <p>没有结果返回!</p>
+  {% endif %}
+{% endblock %}
+{% block header %}
+  {{ super() }}
+{% endblock %}
+{% block nav %}
+  {{ super() }}
+{% endblock %}
+{% block footer %}
+  {{ super() }}
+{% endblock %}

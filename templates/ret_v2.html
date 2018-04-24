@@ -1,0 +1,40 @@
+{% extends "layout.html" %}
+{% block title %}结果{% endblock %}
+{% block head %}
+  {{ super() }}
+{% endblock %}
+{% block section %}
+  {% if msgs %}
+    <table>
+    <tr>
+      <td>编号</td>
+      <td>{{ id }}</td>
+    </tr>
+    {% for msg in msgs %}
+      <tr>
+        <td>----------</td>
+      </tr>
+      <tr>
+        <td>源位置</td>
+        <td>{{ msg.src|e }}</td>
+      </tr>
+      <tr>
+        <td>目的位置</td>
+        <td>{{ msg.dst|e }}</td>
+      </tr>
+    {% endfor %}
+    </ul>
+    </table>
+  {% else %}
+    <p>没有结果返回!</p>
+  {% endif %}
+{% endblock %}
+{% block header %}
+  {{ super() }}
+{% endblock %}
+{% block nav %}
+  {{ super() }}
+{% endblock %}
+{% block footer %}
+  {{ super() }}
+{% endblock %}

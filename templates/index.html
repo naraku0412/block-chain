@@ -1,66 +1,24 @@
-<!doctype html>
-<html>
-<head>
-<meta charset="utf-8">
-<title>三色农业</title>
-
-<style>
-#header {
-    background-color:black;
-    color:white;
-    text-align:center;
-    padding:5px;
-}
-#nav {
-    line-height:30px;
-    background-color:#eeeeee;
-    height:450px;
-    width:150px;
-    float:left;
-    padding:5px; 
-}
-#section {
-    width:450px;
-    float:left;
-    padding:10px; 
-}
-#footer {
-    background-color:black;
-    color:white;
-    clear:both;
-    text-align:center;
-    padding:5px; 
-}
-</style>
-</head>
-<body>
-
-<div id="header">
-<h1>三色农业</h1>
-</div>
-
-<div id="nav">
-<a href="/chain_ret"><input type="button" name="button" value="区块链信息查询"></a><br>
-<br>
-<a href="/chain"><input type="button" name="button" value="交易信息查询"></a><br>
-<br>
-<a href="/chain"><input type="button" name="button" value="检测信息查询"></a><br>
-</div>
-
-<div id="section">
-<img src={{ url_for('static', filename='img/ss.jpg') }} width="300" alt="">
-<p>
-黑龙江三色农业发展有限公司致力于绿色有机农牧产品的生产及销售，
-倡导并遵循自然、健康的农牧业种殖、养殖理念。
-</p>
-<p>
-是高端有机食品的制造者也是您食品安全的忠诚卫士。
-</p>
-</div>
-
-<div id="footer">
-Copyright sanse.com.cn
-</div>
-
-</body>
-</html>
+{% extends "layout.html" %}
+{% block title %}首页{% endblock %}
+{% block head %}
+  {{ super() }}
+{% endblock %}
+{% block section %}
+  <img src={{ url_for('static', filename='img/ss.jpg') }} width="300" alt="">
+  <p>
+  黑龙江三色农业发展有限公司致力于绿色有机农牧产品的生产及销售，
+  倡导并遵循自然、健康的农牧业种殖、养殖理念。
+  </p>
+  <p>
+  是高端有机食品的制造者，也是您食品安全的忠诚卫士。
+  </p>
+{% endblock %}
+{% block header %}
+  {{ super() }}
+{% endblock %}
+{% block nav %}
+  {{ super() }}
+{% endblock %}
+{% block footer %}
+  {{ super() }}
+{% endblock %}

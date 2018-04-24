@@ -1,0 +1,32 @@
+{% extends "layout.html" %}
+{% block title %}查询{% endblock %}
+{% block head %}
+  {{ super() }}
+{% endblock %}
+{% block section %}
+    <form method="POST" action="">
+        <table>
+            <tr>
+                <td>编号</td>
+                <td><input type="text" name="id"/></td>
+            </tr>
+            <br><br>
+            <tr>
+                <td><input type="submit" value="交易记录" formaction="/transction_ret"/></td>
+            </tr>
+            <br><br>
+            <tr>
+                <td><input type="submit" value="检测记录" formaction="/checkpoint_ret"/></td>
+            </tr>
+        </table>
+    </form>
+{% endblock %}
+{% block header %}
+  {{ super() }}
+{% endblock %}
+{% block nav %}
+  {{ super() }}
+{% endblock %}
+{% block footer %}
+  {{ super() }}
+{% endblock %}

@@ -13,9 +13,9 @@ from urllib.parse import urlparse
 import requests
 import pickle
 from optparse import OptionParser
-
+ 
 def parse_opts(parser):
-    parser.add_option("-p","--port",action="store",type="int",dest="port",default=5000,help="the working port")
+    parser.add_option("-p","--port",action="store",type="int",dest="port",default=8080,help="the working port")
     (options,args) = parser.parse_args()
 
     return options
@@ -57,6 +57,20 @@ class Blockchain(object):
             'sender': sender,
             'recipient': recipient,
             'amount': amount,
+        })
+        return self.last_block['index'] + 1
+    def new_transaction_v1(self, _id, src, dst):
+        """
+        生成新交易信息，信息将加入到下一个待挖的区块中
+        :param sender: <str> Address of the Sender
+        :param recipient: <str> Address of the Recipient
+        :param amount: <int> Amount
+        :return: <int> The index of the Block that will hold this transaction
+        """
+        self.current_transactions.append({
+            'id': _id,
+            'src': src,
+            'dst': dst,
         })
         return self.last_block['index'] + 1
     def new_checkpoint(self, _id, _temp, _status,_date):
@@ -170,6 +184,7 @@ class Blockchain(object):
 options = parse_opts(OptionParser(usage="%prog [options]"))
 # Instantiate our Node
 app = Flask(__name__)
+app.secret_key = os.urandom(24) 
 # Generate a globally unique address for this node
 node_identifier = str(uuid4()).replace('-', '')
 # Instantiate the Blockchain
@@ -215,6 +230,30 @@ def mine():
     with open(fn,'wb') as f:
         pickle.dump(blockchain,f)
     return jsonify(response), 200
+def mine_v1():
+    # We run the proof of work algorithm to get the next proof...
+    last_block = blockchain.last_block
+    last_proof = last_block['proof']
+    proof = blockchain.proof_of_work(last_proof)
+    # 给工作量证明的节点提供奖励.
+    # 发送者为 "0" 表明是新挖出的币
+    blockchain.new_transaction(
+        sender="0",
+        recipient=node_identifier,
+        amount=1,
+    )
+    # Forge the new Block by adding it to the chain
+    block = blockchain.new_block(proof)
+    response = {
+        'message': "New Block Forged",
+        'index': block['index'],
+        'transactions': block['transactions'],
+        'proof': block['proof'],
+        'previous_hash': block['previous_hash'],
+    }
+    with open(fn,'wb') as f:
+        pickle.dump(blockchain,f)
+    return response
 @app.route('/transactions/new', methods=['POST'])
 def new_transaction():
     values = request.get_json()
@@ -278,6 +317,9 @@ def consensus():
             'chain': blockchain.chain
         }
     return jsonify(response), 200
+@app.route('/ret/')
+def ret(msg=None):
+    return render_template('ret.html', msg=msg)
 @app.route('/hello/')
 @app.route('/hello/<name>')
 def hello(name=None):
@@ -285,5 +327,59 @@ def hello(name=None):
 @app.route('/test')
 def test(name=None):
     return render_template('test.html')
+@app.route('/typing', methods=['GET','POST'])
+def typing():
+    return render_template('typing.html')
+@app.route('/searching', methods=['GET','POST'])
+def searching():
+    return render_template('searching.html')
+@app.route('/checkpoint_type', methods=['GET','POST'])
+def checkpoint_type():
+    values = request.form
+    # Check that the required fields are in the POST'ed data
+    required = ['id','temp','status','date']
+    if not all(k in values for k in required):
+        return 'Missing values', 400
+    # Create a new Transaction
+    index = blockchain.new_checkpoint(values.get('id'), values.get('temp'), values.get('status'),values.get("date"))
+    response = mine_v1()
+    return render_template('ret.html',msg=response)
+@app.route('/transction_type', methods=['GET','POST'])
+def transaction_type():
+    values = request.form
+    # Check that the required fields are in the POST'ed data
+    required = ['id', 'src', 'dst']
+    if not all(k in values for k in required):
+        return 'Missing values', 400
+    # Create a new Transaction
+    index = blockchain.new_transaction_v1(values.get('id'), values.get('src'), values.get('dst'))
+    response = mine_v1() 
+    return render_template('ret.html',msg=response)
+@app.route('/checkpoint_ret', methods=['GET','POST'])
+def checkpoint_ret():
+    values = request.form
+    required = ['id']
+    if not all(k in values for k in required):
+        return 'Missing values', 400
+    response = do_search(values.get("id"),marker='temp')
+    return render_template('ret_v3.html',msgs=response,id=values.get("id"))
+@app.route('/transction_ret', methods=['GET','POST'])
+def transction_ret():
+    values = request.form
+    required = ['id']
+    if not all(k in values for k in required):
+        return 'Missing values', 400
+    response = do_search(values.get("id"),marker='src')
+    return render_template('ret_v2.html',msgs=response,id=values.get("id"))
+def do_search(id0,marker):
+    ret = []
+    chain = blockchain.chain
+    for item in chain:
+        for trans in item["transactions"]:
+            if marker in trans:
+                if id0 == trans["id"]:
+                    ret.append(trans)
+    return ret
+        
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=options.port)

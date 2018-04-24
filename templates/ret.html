@@ -1,13 +1,13 @@
 {% extends "layout.html" %}
-{% block title %}区块链{% endblock %}
+{% block title %}结果{% endblock %}
 {% block head %}
   {{ super() }}
 {% endblock %}
 {% block section %}
-  {% if chain %}
-    <p>{{ chain }}</p>
+  {% if msg %}
+    <p>{{ msg }}</p>
   {% else %}
-    <p>No block chain info found!</p>
+    <p>没有结果返回!</p>
   {% endif %}
 {% endblock %}
 {% block header %}

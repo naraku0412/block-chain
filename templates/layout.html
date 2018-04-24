@@ -1,0 +1,141 @@
+<!doctype html>
+<html>
+  <head>
+    {% block head %}
+    <meta charset="utf-8">
+    <script src={{ url_for('static', filename='js/typing.js') }} type="text/javascript"></script> 
+    <title>{% block title %}{% endblock %} - 三色农业</title>
+    <style>
+    a, address, b, big, blockquote, body, center, cite, code, dd, del, div, dl, dt, em, fieldset, font, form, h1, h2, h3, h4, h5, h6, html, i, iframe, img, ins, label, legend, li, ol, p, pre, small, span, strong, u, ul, var{
+        padding: 0;
+        margin: 0;
+    }
+    
+    
+    a{
+        color: black;
+        text-decoration: none;
+    }
+    ul{
+        list-style: none;
+    }
+    
+    #tab{
+        width: 498px;
+        height: 300px;
+        border: 1px solid #ddd;
+        box-shadow: 0 0 2px #ddd;
+        margin: 100px 0 0 100px;
+        /*处理超出的内容*/
+        overflow: hidden;
+    }
+    
+    /*选项卡的头部*/
+    #tab-header{
+        background-color: #F7F7F7;
+        height: 33px;
+        text-align: center;
+        position: relative;
+    }
+    #tab-header ul{
+        width: 500px;
+        position: absolute;
+        left: -1px;
+    }
+    #tab-header ul li{
+        float: left;
+        width: 98px;
+        height: 33px;
+        line-height: 33px;
+        padding: 0 1px;
+        border-bottom: 1px solid #dddddd;
+    }
+    #tab-header ul li.selected{
+        background-color: white;
+        font-weight: bolder;
+        border-bottom: 0;
+        border-left: 1px solid #dddddd;
+        border-right: 1px solid #dddddd;
+        padding: 0;
+    }
+    
+    #tab-header ul li:hover{
+        color: orangered;
+    }
+    
+    /*主要内容*/
+    #tab-content{
+        height: 250px;
+    }
+    #tab-content .dom{
+        display: none;
+    }
+    
+    #tab-content .dom ul li{
+        float: left;
+        /*background-color: red;*/
+        margin: 15px 10px;
+        width: 225px;
+    }
+    
+    #tab-content .dom ul li a:hover{
+        color: orange;
+    }
+    #header {
+      background-color:black;
+      color:white;
+      text-align:center;
+      padding:5px;
+    }
+    #nav {
+      line-height:30px;
+      background-color:#eeeeee;
+      height:450px;
+      width:150px;
+      float:left;
+      padding:5px; 
+    }
+    #section {
+      width:900px;
+      height:450px;
+      float:left;
+      padding:10px;
+      overflow: scroll;
+    }
+    #footer {
+      background-color:black;
+      color:white;
+      clear:both;
+      text-align:center;
+      padding:5px; 
+    }
+    </style>
+    {% endblock %}
+  </head>
+<body>
+  <div id="header">
+    {% block header %}
+    <h1>三色农业</h1>
+    {% endblock %}
+  </div>
+  <div id="nav">
+    {% block nav %}
+    <a href="/chain_ret"><input type="button" name="button" value="区块链信息查询"></a><br>
+    <br>
+    <a href="/chain"><input type="button" name="button" value="区块链信息(原始形式)"></a><br>
+    <br>
+    <a href="/searching"><input type="button" name="button" value="信息查询"></a><br>
+    <br>
+    <a href="/typing"><input type="button" name="button" value="信息录入"></a><br>
+    <br>
+    <a href="/index"><input type="button" name="button" value="返回首页"></a><br>
+    {% endblock %}
+  </div>
+  <div id="section">{% block section %}{% endblock %}</div>
+  <div id="footer">
+    {% block footer %}
+    &copy; Copyright sanse.com.cn 
+    {% endblock %}
+  </div>
+</body>
+</html>

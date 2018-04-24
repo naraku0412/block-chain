@@ -15,5 +15,6 @@ RUN apt-get clean && \
     rm -rf /tmp/* /usr/share/man /usr/share/doc 
 
 ADD img /static/img/
-ADD templates /templates/
+ADD js /static/js/
 ADD block-chain.py /
+ADD templates /templates/
