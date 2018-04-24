@@ -344,7 +344,7 @@ def checkpoint_type():
     index = blockchain.new_checkpoint(values.get('id'), values.get('temp'), values.get('status'),values.get("date"))
     response = mine_v1()
     return render_template('ret.html',msg=response)
-@app.route('/transction_type', methods=['GET','POST'])
+@app.route('/transaction_type', methods=['GET','POST'])
 def transaction_type():
     values = request.form
     # Check that the required fields are in the POST'ed data
@@ -363,8 +363,8 @@ def checkpoint_ret():
         return 'Missing values', 400
     response = do_search(values.get("id"),marker='temp')
     return render_template('ret_v3.html',msgs=response,id=values.get("id"))
-@app.route('/transction_ret', methods=['GET','POST'])
-def transction_ret():
+@app.route('/transaction_ret', methods=['GET','POST'])
+def transaction_ret():
     values = request.form
     required = ['id']
     if not all(k in values for k in required):
