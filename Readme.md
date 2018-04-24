@@ -1,7 +1,7 @@
 1 run
 ===
 ```console
-docker run -it --rm --network host -v /data:/mnt blocl-chain /block-chain.py
+docker run -it --rm --network host -v /data:/mnt block-chain /block-chain.py
 ```
 
 2 add a new transaction 
