@@ -1,0 +1,67 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>三色农业</title>
+
+<style>
+#header {
+    background-color:black;
+    color:white;
+    text-align:center;
+    padding:5px;
+}
+#nav {
+    line-height:30px;
+    background-color:#eeeeee;
+    height:450px;
+    width:150px;
+    float:left;
+    padding:5px; 
+}
+#section {
+    width:450px;
+    height:450px;
+    float:left;
+    padding:10px; 
+    overflow: scroll;
+}
+#footer {
+    background-color:black;
+    color:white;
+    clear:both;
+    text-align:center;
+    padding:5px; 
+}
+</style>
+</head>
+<body>
+
+<div id="header">
+<h1>三色农业</h1>
+</div>
+
+<div id="nav">
+<a href="/chain"><input type="button" name="button" value="区块链信息查询"></a><br>
+<br>
+<a href="/chain"><input type="button" name="button" value="交易信息查询"></a><br>
+<br>
+<a href="/chain"><input type="button" name="button" value="检测信息查询"></a><br>
+</div>
+
+<div id="section">
+{% if chain %}
+  <p>{{ chain }}</p>
+{% else %}
+  <p>No block chain info found!</p>
+{% endif %}
+
+</div>
+
+<div id="footer">
+Copyright sanse.com.cn
+</div>
+
+</body>
+</html>
+
