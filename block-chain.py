@@ -4,11 +4,11 @@ import os
 import hashlib
 import json
 from hashlib import sha256
-from time import time
+from time import time, asctime
 from uuid import uuid4
 from textwrap import dedent
 from uuid import uuid4
-from flask import Flask, jsonify, request
+from flask import Flask, jsonify, request, render_template
 from urllib.parse import urlparse
 import requests
 import pickle
@@ -57,6 +57,21 @@ class Blockchain(object):
             'sender': sender,
             'recipient': recipient,
             'amount': amount,
+        })
+        return self.last_block['index'] + 1
+    def new_checkpoint(self, _id, _temp, _status,_date):
+        """
+        generate a new checkpoint info, to be written to the coming block 
+        :param id: <str> ID of the item
+        :param tmp: <iint> Temperature
+        :param status: <str> Status info
+        :return: <int> The index of the Block that will hold this info 
+        """
+        self.current_transactions.append({
+            'id': _id,
+            'temp': _temp,
+            'status': _status,
+            'date': _date,
         })
         return self.last_block['index'] + 1
     @property
@@ -164,6 +179,17 @@ if os.path.exists(fn):
         blockchain = pickle.load(f)
 else:
     blockchain = Blockchain()
+@app.route('/', methods=['GET'])
+@app.route('/index', methods=['GET'])
+def index():
+    return render_template('index.html')
+@app.route('/healthz', methods=['GET'])
+def healthz():
+    response = {
+        'status': "normal",
+        'time': str(asctime()),
+    }
+    return jsonify(response), 200
 @app.route('/mine', methods=['GET'])
 def mine():
     # We run the proof of work algorithm to get the next proof...
@@ -200,6 +226,17 @@ def new_transaction():
     index = blockchain.new_transaction(values['sender'], values['recipient'], values['amount'])
     response = {'message': f'Transaction will be added to Block {index}'}
     return jsonify(response), 201
+@app.route('/checkpoints/new', methods=['POST'])
+def new_checkpoint():
+    values = request.get_json()
+    # Check that the required fields are in the POST'ed data
+    required = ['id', 'temp', 'status','date']
+    if not all(k in values for k in required):
+        return 'Missing values', 400
+    # Create a new Checkpoint 
+    index = blockchain.new_checkpoint(values['id'], values['temp'], values['status'],values['date'])
+    response = {'message': f'Checkpoint will be added to Block {index}'}
+    return jsonify(response), 201
 @app.route('/chain', methods=['GET'])
 def full_chain():
     response = {
@@ -207,6 +244,13 @@ def full_chain():
         'length': len(blockchain.chain),
     }
     return jsonify(response), 200
+@app.route('/chain_ret', methods=['GET'])
+def chain_ret(chain=None):
+    response = {
+        'chain': blockchain.chain,
+        'length': len(blockchain.chain),
+    }
+    return render_template('chain.html', chain=response) 
 @app.route('/nodes/register', methods=['POST'])
 def register_nodes():
     values = request.get_json()
@@ -234,5 +278,12 @@ def consensus():
             'chain': blockchain.chain
         }
     return jsonify(response), 200
+@app.route('/hello/')
+@app.route('/hello/<name>')
+def hello(name=None):
+    return render_template('hello.html', name=name)
+@app.route('/test')
+def test(name=None):
+    return render_template('test.html')
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=options.port)
