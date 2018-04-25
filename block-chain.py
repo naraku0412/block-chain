@@ -265,6 +265,17 @@ def new_transaction():
     index = blockchain.new_transaction(values['sender'], values['recipient'], values['amount'])
     response = {'message': f'Transaction will be added to Block {index}'}
     return jsonify(response), 201
+@app.route('/transactions_v1/new', methods=['POST'])
+def new_transaction_v1():
+    values = request.get_json()
+    # Check that the required fields are in the POST'ed data
+    required = ['id', 'src', 'dst']
+    if not all(k in values for k in required):
+        return 'Missing values', 400
+    # Create a new Transaction
+    index = blockchain.new_transaction_v1(values['id'], values['src'], values['dst'])
+    response = {'message': f'Transaction will be added to Block {index}'}
+    return jsonify(response), 201
 @app.route('/checkpoints/new', methods=['POST'])
 def new_checkpoint():
     values = request.get_json()
