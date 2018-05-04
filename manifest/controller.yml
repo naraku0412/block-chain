@@ -1,0 +1,36 @@
+apiVersion: apps/v1beta1
+kind: StatefulSet
+metadata:
+  name: block-chain
+  namespace: datacentre
+spec:
+  serviceName: "block-chain"
+  podManagementPolicy: Parallel
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        component: block-chain
+    spec:
+      terminationGracePeriodSeconds: 10
+      containers:
+      - name: block-chain
+        image: 172.31.78.217:5000/block-chain:v3
+        command:
+        - /block-chain.py
+        - -p
+        - "8080"
+        livenessProbe:
+          httpGet:
+            path: /healthz
+            port: 8080
+          initialDelaySeconds: 10 
+          periodSeconds: 15 
+        volumeMounts:
+        - name: gluster-volume
+          mountPath: "/mnt"
+      volumes:
+      - name: gluster-volume
+        persistentVolumeClaim:
+          claimName: glusterfs-pvc
+
